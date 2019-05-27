@@ -1,15 +1,15 @@
 package main
 
 import (
-	"os"
-	"fmt"
-	"strings"
 	"bufio"
+	"fmt"
+	"os"
+	"strings"
 )
 
 func main() {
 	args := os.Args[1:]
-    if (len(args) != 1) {
+	if len(args) != 1 {
 		fmt.Println("Usage: generate_ast <output directory>")
 		os.Exit(1)
 	}
@@ -17,10 +17,16 @@ func main() {
 
 	// Expressions
 	defineAst(outputDir, "Expr", map[string][]string{
-		"BinaryExpr": []string{"Left Expr", "Operator *Token", "Right Expr"},
+		"BinaryExpr":   []string{"Left Expr", "Operator *Token", "Right Expr"},
 		"GroupingExpr": []string{"Expression Expr"},
-		"LiteralExpr": []string{"Value LiteralValue"},
-		"UnaryExpr": []string{"Operator *Token", "Right Expr"},
+		"LiteralExpr":  []string{"Value interface{}"},
+		"UnaryExpr":    []string{"Operator *Token", "Right Expr"},
+	})
+
+	// Statements
+	defineAst(outputDir, "Stmt", map[string][]string{
+		"ExpressionStmt": []string{"Expression Expr"},
+		"PrintStmt":      []string{"Expression Expr"},
 	})
 }
 
@@ -54,7 +60,7 @@ func defineAst(outputDir string, baseName string, types map[string][]string) {
 	// Type Interface
 	w.WriteString(fmt.Sprintf("type %s interface {\n", baseName))
 	w.WriteString(fmt.Sprintf("\t%sType() %sType\n", baseName, baseName))
-	w.WriteString(fmt.Sprintf("\tAccept(%sVisitor)\n", baseName))
+	w.WriteString(fmt.Sprintf("\tAccept(%sVisitor) (interface{}, error)\n", baseName))
 	w.WriteString("}\n")
 	w.WriteString("\n")
 
@@ -85,8 +91,8 @@ func defineType(w *bufio.Writer, baseName string, typeName string, fields []stri
 	w.WriteString("\n")
 
 	// Visitor accept interface method
-	w.WriteString(fmt.Sprintf("func (t *%s) Accept(visitor %sVisitor) {\n", typeName, baseName))
-	w.WriteString(fmt.Sprintf("\tvisitor.Visit%s(t)\n", typeName))
+	w.WriteString(fmt.Sprintf("func (t *%s) Accept(visitor %sVisitor) (interface{}, error) {\n", typeName, baseName))
+	w.WriteString(fmt.Sprintf("\treturn visitor.Visit%s(t)\n", typeName))
 	w.WriteString("}\n")
 	w.WriteString("\n")
 }
@@ -94,7 +100,7 @@ func defineType(w *bufio.Writer, baseName string, typeName string, fields []stri
 func defineVisitor(w *bufio.Writer, baseName string, types map[string][]string) {
 	w.WriteString(fmt.Sprintf("type %sVisitor interface {\n", baseName))
 	for typeName := range types {
-		w.WriteString(fmt.Sprintf("\tVisit%s(*%s)\n", typeName, typeName))
+		w.WriteString(fmt.Sprintf("\tVisit%s(*%s) (interface{}, error)\n", typeName, typeName))
 	}
 	w.WriteString("}\n")
 	w.WriteString("\n")
