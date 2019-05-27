@@ -42,24 +42,8 @@ func defineAst(outputDir string, baseName string, types map[string][]string) {
 	w.WriteString("package main\n")
 	w.WriteString("\n")
 
-	// Type enum
-	w.WriteString(fmt.Sprintf("type %sType int\n", baseName))
-	w.WriteString("const (\n")
-	enumTypeDeclared := false
-	for typeName := range types {
-		if !enumTypeDeclared {
-			w.WriteString(fmt.Sprintf("\t%sType%s %sType = iota\n", baseName, typeName, baseName))
-			enumTypeDeclared = true
-		} else {
-			w.WriteString(fmt.Sprintf("\t%sType%s\n", baseName, typeName))
-		}
-	}
-	w.WriteString(")\n")
-	w.WriteString("\n")
-
 	// Type Interface
 	w.WriteString(fmt.Sprintf("type %s interface {\n", baseName))
-	w.WriteString(fmt.Sprintf("\t%sType() %sType\n", baseName, baseName))
 	w.WriteString(fmt.Sprintf("\tAccept(%sVisitor) (interface{}, error)\n", baseName))
 	w.WriteString("}\n")
 	w.WriteString("\n")
@@ -81,12 +65,6 @@ func defineType(w *bufio.Writer, baseName string, typeName string, fields []stri
 	for _, field := range fields {
 		w.WriteString(fmt.Sprintf("\t%s\n", field))
 	}
-	w.WriteString("}\n")
-	w.WriteString("\n")
-
-	// Type interface method
-	w.WriteString(fmt.Sprintf("func (t *%s) %sType() %sType {\n", typeName, baseName, baseName))
-	w.WriteString(fmt.Sprintf("\treturn %sType%s\n", baseName, typeName))
 	w.WriteString("}\n")
 	w.WriteString("\n")
 
