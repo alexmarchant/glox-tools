@@ -21,12 +21,15 @@ func main() {
 		"GroupingExpr": []string{"Expression Expr"},
 		"LiteralExpr":  []string{"Value interface{}"},
 		"UnaryExpr":    []string{"Operator *Token", "Right Expr"},
+		"VarExpr":      []string{"Name *Token"},
+		"AssignExpr":   []string{"Name *Token", "Value Expr"},
 	})
 
 	// Statements
 	defineAst(outputDir, "Stmt", map[string][]string{
 		"ExpressionStmt": []string{"Expression Expr"},
 		"PrintStmt":      []string{"Expression Expr"},
+		"VarStmt":        []string{"Name *Token", "Initializer Expr"},
 	})
 }
 
@@ -44,7 +47,7 @@ func defineAst(outputDir string, baseName string, types map[string][]string) {
 
 	// Type Interface
 	w.WriteString(fmt.Sprintf("type %s interface {\n", baseName))
-	w.WriteString(fmt.Sprintf("\tAccept(%sVisitor) (interface{}, error)\n", baseName))
+	w.WriteString(fmt.Sprintf("\tAccept(%sVisitor) (interface{}, *RuntimeError)\n", baseName))
 	w.WriteString("}\n")
 	w.WriteString("\n")
 
@@ -69,7 +72,7 @@ func defineType(w *bufio.Writer, baseName string, typeName string, fields []stri
 	w.WriteString("\n")
 
 	// Visitor accept interface method
-	w.WriteString(fmt.Sprintf("func (t *%s) Accept(visitor %sVisitor) (interface{}, error) {\n", typeName, baseName))
+	w.WriteString(fmt.Sprintf("func (t *%s) Accept(visitor %sVisitor) (interface{}, *RuntimeError) {\n", typeName, baseName))
 	w.WriteString(fmt.Sprintf("\treturn visitor.Visit%s(t)\n", typeName))
 	w.WriteString("}\n")
 	w.WriteString("\n")
@@ -78,7 +81,7 @@ func defineType(w *bufio.Writer, baseName string, typeName string, fields []stri
 func defineVisitor(w *bufio.Writer, baseName string, types map[string][]string) {
 	w.WriteString(fmt.Sprintf("type %sVisitor interface {\n", baseName))
 	for typeName := range types {
-		w.WriteString(fmt.Sprintf("\tVisit%s(*%s) (interface{}, error)\n", typeName, typeName))
+		w.WriteString(fmt.Sprintf("\tVisit%s(*%s) (interface{}, *RuntimeError)\n", typeName, typeName))
 	}
 	w.WriteString("}\n")
 	w.WriteString("\n")
