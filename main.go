@@ -30,6 +30,7 @@ func main() {
 		"ExpressionStmt": []string{"Expression Expr"},
 		"PrintStmt":      []string{"Expression Expr"},
 		"VarStmt":        []string{"Name *Token", "Initializer Expr"},
+		"BlockStmt":      []string{"Statements []Stmt"},
 	})
 }
 
