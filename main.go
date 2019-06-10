@@ -23,6 +23,8 @@ func main() {
 		"UnaryExpr":    []string{"Operator *Token", "Right Expr"},
 		"VarExpr":      []string{"Name *Token"},
 		"AssignExpr":   []string{"Name *Token", "Value Expr"},
+		"LogicalExpr":  []string{"Left Expr", "Operator *Token", "Right Expr"},
+		"CallExpr":     []string{"Callee Expr", "Paren *Token", "Arguments []Expr"},
 	})
 
 	// Statements
@@ -31,6 +33,8 @@ func main() {
 		"PrintStmt":      []string{"Expression Expr"},
 		"VarStmt":        []string{"Name *Token", "Initializer Expr"},
 		"BlockStmt":      []string{"Statements []Stmt"},
+		"IfStmt":         []string{"Condition Expr", "ThenBranch Stmt", "ElseBranch Stmt"},
+		"WhileStmt":      []string{"Condition Expr", "Body Stmt"},
 	})
 }
 
