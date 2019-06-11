@@ -30,11 +30,12 @@ func main() {
 	// Statements
 	defineAst(outputDir, "Stmt", map[string][]string{
 		"ExpressionStmt": []string{"Expression Expr"},
-		"PrintStmt":      []string{"Expression Expr"},
 		"VarStmt":        []string{"Name *Token", "Initializer Expr"},
 		"BlockStmt":      []string{"Statements []Stmt"},
 		"IfStmt":         []string{"Condition Expr", "ThenBranch Stmt", "ElseBranch Stmt"},
 		"WhileStmt":      []string{"Condition Expr", "Body Stmt"},
+		"FunctionStmt":   []string{"Name *Token", "Params []*Token", "Body []Stmt"},
+		"ReturnStmt":     []string{"Keyword *Token", "Value Expr"},
 	})
 }
 
