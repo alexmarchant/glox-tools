@@ -25,6 +25,9 @@ func main() {
 		"AssignExpr":   []string{"Name *Token", "Value Expr"},
 		"LogicalExpr":  []string{"Left Expr", "Operator *Token", "Right Expr"},
 		"CallExpr":     []string{"Callee Expr", "Paren *Token", "Arguments []Expr"},
+		"GetExpr":      []string{"Object Expr", "Name *Token"},
+		"SetExpr":      []string{"Object Expr", "Name *Token", "Value Expr"},
+		"ThisExpr":     []string{"Keyword *Token"},
 	})
 
 	// Statements
