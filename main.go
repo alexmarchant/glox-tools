@@ -36,6 +36,7 @@ func main() {
 		"WhileStmt":      []string{"Condition Expr", "Body Stmt"},
 		"FunctionStmt":   []string{"Name *Token", "Params []*Token", "Body []Stmt"},
 		"ReturnStmt":     []string{"Keyword *Token", "Value Expr"},
+		"ClassStmt":      []string{"Name *Token", "Methods []*FuntionStmt"},
 	})
 }
 
