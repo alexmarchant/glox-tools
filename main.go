@@ -28,6 +28,7 @@ func main() {
 		"GetExpr":      []string{"Object Expr", "Name *Token"},
 		"SetExpr":      []string{"Object Expr", "Name *Token", "Value Expr"},
 		"ThisExpr":     []string{"Keyword *Token"},
+		"SuperExpr":    []string{"Keyword *Token", "Method *Token"},
 	})
 
 	// Statements
@@ -39,7 +40,7 @@ func main() {
 		"WhileStmt":      []string{"Condition Expr", "Body Stmt"},
 		"FunctionStmt":   []string{"Name *Token", "Params []*Token", "Body []Stmt"},
 		"ReturnStmt":     []string{"Keyword *Token", "Value Expr"},
-		"ClassStmt":      []string{"Name *Token", "Methods []*FunctionStmt"},
+		"ClassStmt":      []string{"Name *Token", "Superclass *VarExpr", "Methods []*FunctionStmt"},
 	})
 }
 
